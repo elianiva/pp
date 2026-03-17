@@ -21,6 +21,9 @@ importers:
       '@shikijs/core':
         specifier: ^4.0.2
         version: 4.0.2
+      '@shikijs/engine-oniguruma':
+        specifier: ^4.0.2
+        version: 4.0.2
       '@shikijs/langs':
         specifier: ^4.0.2
         version: 4.0.2
@@ -36,6 +39,9 @@ importers:
       nanoid:
         specifier: ^5.1.7
         version: 5.1.7
+      shiki:
+        specifier: ^4.0.2
+        version: 4.0.2
       solid-js:
         specifier: ^1.9.11
         version: 1.9.11

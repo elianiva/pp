@@ -13,11 +13,13 @@
     "@astrojs/db": "^0.20.0",
     "@astrojs/solid-js": "^6.0.0",
     "@shikijs/core": "^4.0.2",
+    "@shikijs/engine-oniguruma": "^4.0.2",
     "@shikijs/langs": "^4.0.2",
     "@shikijs/themes": "^4.0.2",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.5",
     "nanoid": "^5.1.7",
+    "shiki": "^4.0.2",
     "solid-js": "^1.9.11",
     "tailwindcss": "^4.2.1"
   },
