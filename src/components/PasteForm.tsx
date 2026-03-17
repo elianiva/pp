@@ -1,69 +1,97 @@
-import { createSignal } from 'solid-js';
-import LanguageSelector from './LanguageSelector';
-import type { Language } from '../lib/shiki';
+import { createSignal } from "solid-js";
+import LanguageSelector from "./LanguageSelector";
+import type { Language } from "../lib/shiki";
 
 export default function PasteForm() {
-  const [content, setContent] = createSignal('');
-  const [language, setLanguage] = createSignal<Language>('plaintext');
+  const [content, setContent] = createSignal("");
+  const [language, setLanguage] = createSignal<Language>("plaintext");
   const [isSubmitting, setIsSubmitting] = createSignal(false);
-  const [error, setError] = createSignal('');
+  const [error, setError] = createSignal("");
 
   const handleSubmit = async () => {
     const text = content().trim();
     if (!text) {
-      setError('Please enter some content');
+      setError("Please enter some content");
       return;
     }
 
     setIsSubmitting(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('/api/paste', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/paste", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: text, language: language() }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to create paste');
+        throw new Error(data.error || "Failed to create paste");
       }
 
       const { id } = await response.json();
       window.location.href = `/${id}`;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create paste');
+      setError(err instanceof Error ? err.message : "Failed to create paste");
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
-      <div class="p-4 border-b border-stone-200 flex items-center justify-between">
-        <LanguageSelector value={language()} onChange={setLanguage} />
+    <div class="">
+      <div
+        class="
+        relative
+        before:content-[''] before:absolute before:top-0 before:bottom-0 before:-left-80 before:-right-80 before:border-y before:border-mauve-200
+        after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:-left-80 after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
+        "
+      >
+        <div class="relative bg-mauve-50 px-4 py-2 z-20 border border-mauve-200 -mx-4">
+          <LanguageSelector value={language()} onChange={setLanguage} />
+        </div>
       </div>
+
+      {/* Text area */}
       <textarea
         value={content()}
         onInput={(e) => setContent(e.currentTarget.value)}
-        class="w-full h-96 p-4 font-mono text-sm text-stone-700 bg-white resize-none focus:outline-none"
-        placeholder="Paste your text or code here..."
+        class="block w-full min-h-128 overscroll-none p-4 bg-white text-mauve-700 font-mono text-sm resize-none focus:outline-none border-mauve-200 leading-relaxed"
+        placeholder="Paste youre text here..."
         disabled={isSubmitting()}
+        spellcheck={false}
       />
+
+      {/* Action bar */}
+      <div
+        class="
+        relative
+        before:content-[''] before:absolute before:top-0 before:bottom-0 before:-left-80 before:-right-80 before:border-y before:border-mauve-200
+        after:content-[''] after:absolute after:top-0 after:bottom-0 after:-left-80 after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
+        "
+      >
+        <div class="relative bg-mauve-50 z-20 border border-mauve-200 flex items-center justify-between py-2 -mx-4">
+          <button
+            onClick={handleSubmit}
+            disabled={isSubmitting()}
+            class="py-1 px-4 bg-mauve-50 text-mauve-700 text-sm font-medium cursor-pointer border-r border-mauve-200 hover:underline"
+          >
+            {isSubmitting() ? "Creating..." : "Create Paste"}
+          </button>
+          <div class={`text-sm text-mauve-400 text-mono px-4 border-l border-mauve-200`}>
+            <span class="tabular-nums">
+              {content().length} chars · {content().split("\n").length} lines
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Error message */}
       {error() && (
-        <div class="px-4 py-2 bg-red-50 border-t border-red-200 text-red-600 text-sm">
-          {error()}
+        <div class="error-box border-x-0">
+          <span class="text-mono">error:</span> {error()}
         </div>
       )}
-      <div class="p-4 border-t border-stone-200 flex justify-end">
-        <button
-          onClick={handleSubmit}
-          disabled={isSubmitting()}
-          class="px-6 py-2 bg-mauve-600 text-white text-sm font-medium rounded hover:bg-mauve-700 focus:outline-none focus:ring-2 focus:ring-mauve-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isSubmitting() ? 'Creating...' : 'Create Paste'}
-        </button>
-      </div>
     </div>
   );
 }

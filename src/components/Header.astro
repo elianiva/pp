@@ -8,26 +8,38 @@ const { id, language } = Astro.props;
 ---
 
 <header class="flex items-center justify-between mb-6">
-  <div class="flex items-center gap-4">
-    <a href="/" class="text-xl font-semibold text-mauve-600 hover:text-mauve-700">pp</a>
+  <div class="flex items-center gap-3">
+    <a
+      href="/"
+      class="text-2xl font-bold text-primary transition-colors no-underline text-display"
+    >
+      pp
+    </a>
+
     {id && (
       <>
-        <span class="text-stone-400">/</span>
-        <span class="text-stone-600 font-mono text-sm">{id}</span>
+        <span class="text-muted">/</span>
+        <span class="text-mono text-sm text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-2 py-1 border border-[var(--border-primary)]">
+          {id}
+        </span>
       </>
     )}
+
     {language && (
       <>
-        <span class="text-stone-400">·</span>
-        <span class="text-stone-500 text-sm">{language}</span>
+        <span class="text-muted">·</span>
+        <span class="label label-accent">
+          {language}
+        </span>
       </>
     )}
   </div>
+
   <div class="flex items-center gap-2">
     {id && (
       <a
         href={`/${id}/raw`}
-        class="px-3 py-1.5 text-sm text-stone-600 bg-white border border-stone-300 rounded hover:bg-stone-50 transition-colors"
+        class="btn-secondary text-sm no-underline"
       >
         Raw
       </a>

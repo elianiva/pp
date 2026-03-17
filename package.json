@@ -12,6 +12,8 @@
   "dependencies": {
     "@astrojs/db": "^0.20.0",
     "@astrojs/solid-js": "^6.0.0",
+    "@fontsource-variable/lilex": "^5.2.1",
+    "@fontsource-variable/space-grotesk": "^5.2.10",
     "@shikijs/core": "^4.0.2",
     "@shikijs/engine-oniguruma": "^4.0.2",
     "@shikijs/langs": "^4.0.2",

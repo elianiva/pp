@@ -23,12 +23,22 @@ const language = ext ? getLanguageFromExtension(ext) : paste.language;
 const highlightedHtml = await highlight(paste.content, language);
 ---
 
-<Layout title={`pp - ${id}`}>
-  <main class="max-w-6xl mx-auto px-4 py-6">
+<Layout title={`pp — ${id}`}>
+  <main class="max-w-6xl mx-auto px-6 py-8">
     <Header id={id} language={language} />
 
-    <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
+    <div class="panel">
       <CodeViewer client:load html={highlightedHtml} rawContent={paste.content} />
     </div>
+
+    {/* Footer info */}
+    <footer class="mt-4 flex items-center justify-between text-sm text-[var(--text-muted)] text-mono">
+      <div class="flex items-center gap-4">
+        <span>Created {paste.createdAt.toLocaleDateString()}</span>
+        <span>·</span>
+        <span>{paste.content.length} bytes</span>
+      </div>
+      <span class="text-[var(--mauve-600)]">▲</span>
+    </footer>
   </main>
 </Layout>

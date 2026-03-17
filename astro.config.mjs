@@ -12,6 +12,6 @@ export default defineConfig({
   integrations: [db(), solidJs()],
 
   vite: {
-    plugins: [tailwindcss()]
-  }
+    plugins: [tailwindcss()],
+  },
 });
