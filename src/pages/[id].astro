@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import CodeViewer from '../components/CodeViewer';
+import { db, Paste, eq } from 'astro:db';
+import { highlight, getLanguageFromExtension } from '../lib/shiki';
+
+const { id } = Astro.params;
+const ext = Astro.url.searchParams.get('ext');
+
+if (!id) {
+  return Astro.redirect('/');
+}
+
+const result = await db.select().from(Paste).where(eq(Paste.id, id));
+
+if (result.length === 0) {
+  return new Response('Paste not found', { status: 404 });
+}
+
+const paste = result[0];
+const language = ext ? getLanguageFromExtension(ext) : paste.language;
+const highlightedHtml = await highlight(paste.content, language);
+---
+
+<Layout title={`pp - ${id}`}>
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <Header id={id} language={language} />
+
+    <div class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden">
+      <CodeViewer client:load html={highlightedHtml} rawContent={paste.content} />
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  id?: string;
+  language?: string;
+}
+
+const { id, language } = Astro.props;
+---
+
+<header class="flex items-center justify-between mb-6">
+  <div class="flex items-center gap-4">
+    <a href="/" class="text-xl font-semibold text-mauve-600 hover:text-mauve-700">pp</a>
+    {id && (
+      <>
+        <span class="text-stone-400">/</span>
+        <span class="text-stone-600 font-mono text-sm">{id}</span>
+      </>
+    )}
+    {language && (
+      <>
+        <span class="text-stone-400">·</span>
+        <span class="text-stone-500 text-sm">{language}</span>
+      </>
+    )}
+  </div>
+  <div class="flex items-center gap-2">
+    {id && (
+      <a
+        href={`/${id}/raw`}
+        class="px-3 py-1.5 text-sm text-stone-600 bg-white border border-stone-300 rounded hover:bg-stone-50 transition-colors"
+      >
+        Raw
+      </a>
+    )}
+  </div>
+</header>
