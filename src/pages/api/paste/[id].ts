@@ -1,6 +1,8 @@
 import type { APIRoute } from "astro";
 import { db, Paste, eq } from "astro:db";
 
+export const prerender = false;
+
 export const GET: APIRoute = async ({ params }) => {
   try {
     const { id } = params;

@@ -32,13 +32,13 @@ const highlightedHtml = await highlight(paste.content, language);
     </div>
 
     {/* Footer info */}
-    <footer class="mt-4 flex items-center justify-between text-sm text-[var(--text-muted)] text-mono">
+    <footer class="mt-4 flex items-center justify-between text-sm text-mauve-200 text-mono">
       <div class="flex items-center gap-4">
-        <span>Created {paste.createdAt.toLocaleDateString()}</span>
+        <span>Created {new Date(paste.createdAt).toLocaleDateString()}</span>
         <span>·</span>
         <span>{paste.content.length} bytes</span>
       </div>
-      <span class="text-[var(--mauve-600)]">▲</span>
+      <span class="text-mauve-600">▲</span>
     </footer>
   </main>
 </Layout>

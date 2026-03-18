@@ -2,6 +2,8 @@ import type { APIRoute } from "astro";
 import { db, Paste } from "astro:db";
 import { generateId } from "../../lib/nanoid";
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const { content, language } = await request.json();
