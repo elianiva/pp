@@ -12,7 +12,7 @@ import cloudflare from "@astrojs/cloudflare";
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  integrations: [db(), solidJs()],
+  integrations: [db({ mode: "web" }), solidJs()],
 
   vite: {
     plugins: [tailwindcss()],
@@ -20,3 +20,4 @@ export default defineConfig({
 
   adapter: cloudflare(),
 });
+
