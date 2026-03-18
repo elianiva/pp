@@ -19,7 +19,7 @@ export async function getHighlighter() {
   highlighter = await createHighlighterCore({
     themes: [oneLight],
     langs: [typescript, javascript, python, rust, go, html, css, json, markdown],
-    engine: createOnigurumaEngine(import("shiki/wasm")),
+    engine: createOnigurumaEngine(import("shiki/onig.wasm")),
   });
 
   return highlighter;

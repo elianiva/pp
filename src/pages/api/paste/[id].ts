@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
-import { db, Paste, eq } from "astro:db";
+import { eq } from "drizzle-orm";
+import { getDb, Paste } from "../../../lib/db";
 
 export const prerender = false;
 
@@ -14,6 +15,7 @@ export const GET: APIRoute = async ({ params }) => {
       });
     }
 
+    const db = getDb();
     const result = await db.select().from(Paste).where(eq(Paste.id, id));
 
     if (result.length === 0) {

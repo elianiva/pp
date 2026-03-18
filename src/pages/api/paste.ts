@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
-import { db, Paste } from "astro:db";
+import { eq } from "drizzle-orm";
+import { getDb, Paste } from "../../lib/db";
 import { generateId } from "../../lib/nanoid";
 
 export const prerender = false;
@@ -27,6 +28,7 @@ export const POST: APIRoute = async ({ request }) => {
     const id = generateId();
     const createdAt = Date.now();
 
+    const db = getDb();
     await db.insert(Paste).values({
       id,
       content,

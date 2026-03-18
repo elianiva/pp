@@ -4,9 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "dev:remote": "astro dev --remote",
     "build": "astro build",
-    "build:remote": "astro build --remote",
     "preview": "astro preview",
     "astro": "astro",
     "prepare": "vp config",
@@ -15,16 +13,18 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.2",
-    "@astrojs/db": "^0.20.0",
     "@astrojs/solid-js": "^6.0.0",
     "@fontsource-variable/lilex": "^5.2.1",
     "@fontsource-variable/space-grotesk": "^5.2.10",
+    "@libsql/client": "^0.17.0",
     "@shikijs/core": "^4.0.2",
     "@shikijs/engine-oniguruma": "^4.0.2",
     "@shikijs/langs": "^4.0.2",
     "@shikijs/themes": "^4.0.2",
     "@tailwindcss/vite": "^4.2.1",
+    "@tursodatabase/serverless": "^0.2.4",
     "astro": "^6.0.5",
+    "drizzle-orm": "^0.45.1",
     "nanoid": "^5.1.7",
     "shiki": "^4.0.2",
     "solid-js": "^1.9.11",
@@ -41,7 +41,13 @@
   "pnpm": {
     "overrides": {
       "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-      "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
-    }
+      "vitest": "npm:@voidzero-dev/vite-plus-test@latest",
+      "node-fetch": "npm:@whatwg-node/fetch@latest"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "workerd"
+    ]
   }
 }
