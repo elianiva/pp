@@ -27,14 +27,17 @@ export default function CodeViewer(props: CodeViewerProps) {
         "
       >
         <div class="relative flex items-center justify-between bg-mauve-50 px-4 py-2 z-20 border border-mauve-200 -mx-4">
-          <div class="flex items-center gap-6">
-            <label class="flex items-center gap-2 text-sm text-mauve-400 cursor-pointer">
+          <div class="flex items-center gap-6 pr-4 border-r border-mauve-200">
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="checkbox"
                 checked={showLineNumbers()}
                 onChange={(e) => setShowLineNumbers(e.currentTarget.checked)}
+                class="hidden"
               />
-              <span class="font-sans text-xs uppercase tracking-wider">Line numbers</span>
+              <span class="font-sans text-xs uppercase tracking-wider">
+                Line numbers: {showLineNumbers() ? "on" : "off"}
+              </span>
             </label>
           </div>
 
