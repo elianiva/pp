@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
+    "dev:remote": "astro dev --remote",
     "build": "astro build",
     "build:remote": "astro build --remote",
     "preview": "astro preview",
