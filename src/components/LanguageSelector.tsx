@@ -91,10 +91,11 @@ export default function LanguageSelector(props: LanguageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => handleSelect(lang.value)}
-                  class={`w-full text-left px-3 py-2 text-sm text-mono transition-colors flex items-center justify-between gap-4 ${props.value === lang.value
+                  class={`w-full text-left px-3 py-2 text-sm text-mono transition-colors flex items-center justify-between gap-4 ${
+                    props.value === lang.value
                       ? "bg-mauve-100 text-mauve-900"
                       : "text-mauve-600 hover:bg-mauve-100 hover:text-mauve-900"
-                    }`}
+                  }`}
                   role="option"
                   aria-selected={props.value === lang.value}
                 >

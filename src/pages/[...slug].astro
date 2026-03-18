@@ -5,12 +5,14 @@ import CodeViewer from '../components/CodeViewer';
 import { db, Paste, eq } from 'astro:db';
 import { highlight, getLanguageFromExtension } from '../lib/shiki';
 
-const { id } = Astro.params;
-const ext = Astro.url.searchParams.get('ext');
+const { slug } = Astro.params;
 
-if (!id) {
+if (!slug) {
   return Astro.redirect('/');
 }
+
+// Parse slug to extract id and optional extension (e.g., "abc123.ts" -> id="abc123", ext="ts")
+const [id, ext] = slug.split('.');
 
 const result = await db.select().from(Paste).where(eq(Paste.id, id));
 
