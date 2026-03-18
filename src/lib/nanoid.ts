@@ -1,5 +1,7 @@
-import { nanoid as _nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
+
+const randomId = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 10);
 
 export function generateId(): string {
-  return _nanoid(8);
+  return randomId();
 }
