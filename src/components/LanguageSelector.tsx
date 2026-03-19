@@ -50,17 +50,17 @@ export default function LanguageSelector(props: LanguageSelectorProps) {
   });
 
   return (
-    <div class="flex items-center gap-3">
-      <label class="text-sm text-secondary text-mono tracking-wider font-display font-medium">
+    <div class="flex items-center gap-3 w-full sm:w-auto">
+      <label class="text-sm text-secondary text-mono tracking-wider font-display font-medium shrink-0">
         Lang:
       </label>
 
-      <div class="relative" ref={(el) => (containerRef = el)}>
+      <div class="relative flex-1 sm:flex-none" ref={(el) => (containerRef = el)}>
         {/* Trigger button */}
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen())}
-          class="flex items-center gap-2 border-x border-mauve-200 text-sm text-mono text-mauve-700 px-3 py-1.5 focus:outline-none transition-colors min-w-50 justify-between"
+          class="flex items-center gap-2 border sm:border-x sm:border-y-0 border-mauve-200 text-sm text-mono text-mauve-700 px-3 py-1.5 focus:outline-none transition-colors w-full sm:min-w-50 justify-between"
           aria-expanded={isOpen()}
           aria-haspopup="listbox"
         >
@@ -83,7 +83,7 @@ export default function LanguageSelector(props: LanguageSelectorProps) {
         {/* Dropdown menu */}
         <Show when={isOpen()}>
           <div
-            class="absolute top-full z-50 w-50 bg-mauve-50 border border-mauve-200/50 max-h-64 overflow-auto overflow-x-hidden divide-y divide-mauve-200"
+            class="absolute top-full left-0 right-0 z-50 sm:w-50 bg-mauve-50 border border-mauve-200/50 max-h-64 overflow-auto overflow-x-hidden divide-y divide-mauve-200"
             role="listbox"
           >
             <For each={LANGUAGES}>
@@ -91,11 +91,10 @@ export default function LanguageSelector(props: LanguageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => handleSelect(lang.value)}
-                  class={`w-full text-left px-3 py-2 text-sm text-mono transition-colors flex items-center justify-between gap-4 ${
-                    props.value === lang.value
+                  class={`w-full text-left px-3 py-2 text-sm text-mono transition-colors flex items-center justify-between gap-4 ${props.value === lang.value
                       ? "bg-mauve-100 text-mauve-900"
                       : "text-mauve-600 hover:bg-mauve-100 hover:text-mauve-900"
-                  }`}
+                    }`}
                   role="option"
                   aria-selected={props.value === lang.value}
                 >

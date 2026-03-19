@@ -42,12 +42,12 @@ export default function PasteForm() {
     <div class="">
       <div
         class="
-        relative
-        before:content-[''] before:absolute before:top-0 before:bottom-0 before:-left-80 before:-right-80 before:border-y before:border-mauve-200
-        after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:-left-80 after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
+        relative sm:-mx-4
+        before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 md:before:-left-80 md:before:-right-80 before:border-y before:border-mauve-200
+        after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:left-0 after:right-0 md:after:-left-80 md:after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
         "
       >
-        <div class="relative bg-mauve-50 px-4 py-2 z-20 border border-mauve-200 -mx-4">
+        <div class="relative bg-mauve-50 px-4 py-2 z-20 border border-mauve-200">
           <LanguageSelector value={language()} onChange={setLanguage} />
         </div>
       </div>
@@ -56,7 +56,7 @@ export default function PasteForm() {
       <textarea
         value={content()}
         onInput={(e) => setContent(e.currentTarget.value)}
-        class="block w-full min-h-128 overscroll-none p-4 bg-white text-mauve-700 font-mono text-sm resize-none focus:outline-none border-mauve-200 leading-relaxed"
+        class="block w-full min-h-[60vh] md:min-h-128 overscroll-none p-4 bg-white text-mauve-700 font-mono text-sm resize-none focus:outline-none border-mauve-200 leading-relaxed"
         placeholder="Paste youre text here..."
         disabled={isSubmitting()}
         spellcheck={false}
@@ -65,21 +65,23 @@ export default function PasteForm() {
       {/* Action bar */}
       <div
         class="
-        relative
-        before:content-[''] before:absolute before:top-0 before:bottom-0 before:-left-80 before:-right-80 before:border-y before:border-mauve-200
-        after:content-[''] after:absolute after:top-0 after:bottom-0 after:-left-80 after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
+        relative sm:-mx-4
+        before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 md:before:-left-80 md:before:-right-80 before:border-y before:border-mauve-200
+        after:content-[''] after:absolute after:top-0 after:bottom-0 after:left-0 after:right-0 md:after:-left-80 md:after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
         "
       >
-        <div class="relative bg-mauve-50 z-20 border border-mauve-200 flex items-center justify-between py-2 -mx-4">
+        <div class="relative bg-mauve-50 z-20 border border-mauve-200 flex items-center justify-between py-2">
           <button
             onClick={handleSubmit}
             disabled={isSubmitting()}
-            class="py-1 px-4 bg-mauve-50 text-mauve-700 text-sm font-medium cursor-pointer border-r border-mauve-200 hover:underline"
+            class="py-1 px-4 bg-mauve-50 text-mauve-700 text-sm font-medium cursor-pointer border-r border-mauve-200 hover:underline text-left"
           >
             {isSubmitting() ? "Creating..." : "Create Paste"}
           </button>
-          <div class={`text-sm text-mauve-400 text-mono px-4 border-l border-mauve-200`}>
-            <span class="tabular-nums">
+          <div
+            class={`text-sm text-mauve-400 text-mono px-4 border-l border-mauve-200`}
+          >
+            <span class="tabular-nums break-all sm:break-normal">
               {content().length} chars · {content().split("\n").length} lines
             </span>
           </div>

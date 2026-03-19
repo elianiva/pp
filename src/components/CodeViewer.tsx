@@ -21,12 +21,12 @@ export default function CodeViewer(props: CodeViewerProps) {
     <div class="w-full">
       <div
         class="
-        relative
-        before:content-[''] before:absolute before:top-0 before:bottom-0 before:-left-80 before:-right-80 before:border-y before:border-mauve-200
-        after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:-left-80 after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
+        relative sm:-mx-4
+        before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:right-0 md:before:-left-80 md:before:-right-80 before:border-y before:border-mauve-200
+        after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:left-0 after:right-0 md:after:-left-80 md:after:-right-80 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
         "
       >
-        <div class="relative flex items-center justify-between bg-mauve-50 px-4 py-2 z-20 border border-mauve-200 -mx-4">
+        <div class="relative flex items-center justify-between bg-mauve-50 px-4 py-2 z-20 border border-mauve-200">
           <div class="flex items-center gap-6 pr-4 border-r border-mauve-200">
             <label class="flex items-center gap-2 text-sm cursor-pointer">
               <input
@@ -52,7 +52,7 @@ export default function CodeViewer(props: CodeViewerProps) {
 
       {/* Code display */}
       <div
-        class="overflow-x-auto border-b border-mauve-200 max-w-3xl p-4 pl-0 bg-white"
+        class="overflow-x-auto border-b border-mauve-200 w-full p-4 pl-0 bg-white overscroll-none"
         classList={{
           "[&_.line]:pl-12": !showLineNumbers(),
         }}

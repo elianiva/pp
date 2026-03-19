@@ -27,16 +27,16 @@ const highlightedHtml = await highlight(paste.content, language);
 ---
 
 <Layout title={`pp - ${id}`}>
-  <main class="relative md:min-w-3xl mx-auto border-l border-r border-mauve-200 flex-1 flex flex-col">
+  <main class="relative w-full max-w-3xl mx-auto border-x border-mauve-200 flex-1 flex flex-col">
     <div
       class="
-      absolute w-4 -left-4 top-0 bottom-0 border-x border-mauve-200
+      absolute w-2 left-0 top-0 bottom-0 border-x border-mauve-200 md:w-4 md:-left-4
       after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:left-0 after:right-0 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
       "
     ></div>
     <div
       class="
-      absolute w-4 -right-4 top-0 bottom-0 border-x border-mauve-200
+      absolute w-2 right-0 top-0 bottom-0 border-x border-mauve-200 sm:w-4 sm:-right-4
       after:z-0 after:content-[''] after:absolute after:top-0 after:bottom-0 after:left-0 after:right-0 after:bg-mauve-200 after:bg-diagonal after:mask-(--background-image-diagonal) after:mask-size-[6px_6px] after:mask-repeat after:opacity-10
       "
     ></div>
