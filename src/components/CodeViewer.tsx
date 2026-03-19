@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createMemo, createSignal } from "solid-js";
 
 interface CodeViewerProps {
   html: string;
@@ -9,6 +9,13 @@ export default function CodeViewer(props: CodeViewerProps) {
   const [showLineNumbers, setShowLineNumbers] = createSignal(true);
   const [wrapLines, setWrapLines] = createSignal(false);
   const [copied, setCopied] = createSignal(false);
+  const contentWithLineNumberDivs = createMemo(() =>
+    props.html.replace(
+      /<span class="line">([\s\S]*?)<\/span>/g,
+      (_, lineContent: string) =>
+        `<div class="code-line"><div class="line-number" aria-hidden="true"></div><div class="line-content">${lineContent}</div></div>`,
+    ),
+  );
   let timer: NodeJS.Timeout | null = null;
 
   const handleCopy = async () => {
@@ -72,17 +79,13 @@ export default function CodeViewer(props: CodeViewerProps) {
       <div
         onWheel={handleCodeWheel}
         class="overflow-x-auto border-b border-mauve-200 w-full p-4 pl-0 bg-white overscroll-x-none"
-        classList={{
-          "[&_.line]:pl-12": !showLineNumbers(),
-        }}
       >
         <div
-          innerHTML={props.html}
+          innerHTML={contentWithLineNumberDivs()}
           class="shiki-container text-sm pre:m-0 font-mono"
           classList={{
             "no-line-numbers": !showLineNumbers(),
-            "[&_pre]:whitespace-pre-wrap [&_pre]:wrap-break-word [&_.line>span]:inline [&_.line>span]:indent-[3rem_hanging]":
-              wrapLines(),
+            "wrap-lines [&_pre]:whitespace-pre-wrap [&_pre]:wrap-break-word": wrapLines(),
           }}
         />
       </div>

@@ -50,17 +50,39 @@ samp {
   background-color: white !important;
 }
 
+.shiki code {
+  @apply flex flex-col gap-1;
+}
+
 /* Line numbers */
-.shiki-container .line {
-  line-height: 1.75em;
+.shiki-container .code-line {
+  @apply flex items-start;
   counter-increment: line;
 }
 
-.shiki-container .line::before {
-  @apply text-mauve-400 text-xs select-none text-right inline-block w-12;
-  content: counter(line) "  ";
+.shiki-container .line-number {
+  @apply text-mauve-400 text-xs select-none text-right w-4 pr-4 leading-relaxed;
+  flex: 0 0 3rem;
 }
 
-.shiki-container.no-line-numbers .line::before {
+.shiki-container .line-number::before {
+  content: counter(line);
+}
+
+.shiki-container .line-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.shiki-container .line-content > span {
+  display: inline;
+}
+
+.shiki-container.wrap-lines .line-content > span {
+  display: inline;
+  text-indent: -1rem;
+}
+
+.shiki-container.no-line-numbers .line-number {
   display: none;
 }
