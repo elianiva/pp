@@ -1,5 +1,5 @@
 import { createHighlighterCore } from "@shikijs/core";
-import { createOnigurumaEngine } from "@shikijs/engine-oniguruma";
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 import typescript from "@shikijs/langs/typescript";
 import javascript from "@shikijs/langs/javascript";
 import python from "@shikijs/langs/python";
@@ -19,7 +19,7 @@ export async function getHighlighter() {
   highlighter = await createHighlighterCore({
     themes: [oneLight],
     langs: [typescript, javascript, python, rust, go, html, css, json, markdown],
-    engine: createOnigurumaEngine(import("shiki/onig.wasm")),
+    engine: createJavaScriptRegexEngine(),
   });
 
   return highlighter;
