@@ -7,6 +7,7 @@ interface CodeViewerProps {
 
 export default function CodeViewer(props: CodeViewerProps) {
   const [showLineNumbers, setShowLineNumbers] = createSignal(true);
+  const [wrapLines, setWrapLines] = createSignal(false);
   const [copied, setCopied] = createSignal(false);
   let timer: NodeJS.Timeout | null = null;
 
@@ -15,6 +16,12 @@ export default function CodeViewer(props: CodeViewerProps) {
     await navigator.clipboard.writeText(props.rawContent);
     setCopied(true);
     timer = setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCodeWheel = (e: WheelEvent) => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX) || e.shiftKey) return;
+    e.preventDefault();
+    window.scrollBy({ top: e.deltaY, behavior: "auto" });
   };
 
   return (
@@ -27,8 +34,8 @@ export default function CodeViewer(props: CodeViewerProps) {
         "
       >
         <div class="relative flex items-center justify-between bg-mauve-50 px-4 py-2 z-20 border border-mauve-200">
-          <div class="flex items-center gap-6 pr-4 border-r border-mauve-200">
-            <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <div class="flex items-center gap-4">
+            <label class="flex items-center gap-2 text-sm cursor-pointer border-r border-mauve-200 pr-4">
               <input
                 type="checkbox"
                 checked={showLineNumbers()}
@@ -37,6 +44,17 @@ export default function CodeViewer(props: CodeViewerProps) {
               />
               <span class="font-sans text-xs uppercase tracking-wider">
                 Line numbers: {showLineNumbers() ? "on" : "off"}
+              </span>
+            </label>
+            <label class="flex items-center gap-2 text-sm cursor-pointer border-r border-mauve-200 pr-4">
+              <input
+                type="checkbox"
+                checked={wrapLines()}
+                onChange={(e) => setWrapLines(e.currentTarget.checked)}
+                class="hidden"
+              />
+              <span class="font-sans text-xs uppercase tracking-wider">
+                Line wrap: {wrapLines() ? "on" : "off"}
               </span>
             </label>
           </div>
@@ -52,7 +70,8 @@ export default function CodeViewer(props: CodeViewerProps) {
 
       {/* Code display */}
       <div
-        class="overflow-x-auto border-b border-mauve-200 w-full p-4 pl-0 bg-white overscroll-none"
+        onWheel={handleCodeWheel}
+        class="overflow-x-auto border-b border-mauve-200 w-full p-4 pl-0 bg-white overscroll-x-none"
         classList={{
           "[&_.line]:pl-12": !showLineNumbers(),
         }}
@@ -62,6 +81,8 @@ export default function CodeViewer(props: CodeViewerProps) {
           class="shiki-container text-sm pre:m-0 font-mono"
           classList={{
             "no-line-numbers": !showLineNumbers(),
+            "[&_pre]:whitespace-pre-wrap [&_pre]:wrap-break-word [&_.line>span]:inline [&_.line>span]:indent-[3rem_hanging]":
+              wrapLines(),
           }}
         />
       </div>

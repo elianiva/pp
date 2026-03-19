@@ -2,7 +2,6 @@
 @import "@fontsource-variable/space-grotesk";
 @import "@fontsource-variable/lilex";
 
-/* Terminal-esque Design System - Light Theme */
 @theme {
   --font-display: "Space Grotesk Variable", sans-serif;
   --font-mono: "Lilex Variable", ui-monospace, monospace;
