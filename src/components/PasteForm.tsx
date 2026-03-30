@@ -78,9 +78,7 @@ export default function PasteForm() {
           >
             {isSubmitting() ? "Creating..." : "Create Paste"}
           </button>
-          <div
-            class={`text-sm text-mauve-400 text-mono px-4 border-l border-mauve-200`}
-          >
+          <div class={`text-sm text-mauve-400 text-mono px-4 border-l border-mauve-200`}>
             <span class="tabular-nums break-all sm:break-normal">
               {content().length} chars · {content().split("\n").length} lines
             </span>
