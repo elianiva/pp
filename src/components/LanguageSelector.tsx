@@ -1,8 +1,9 @@
 import { createSignal, createMemo, For, Show, onMount, onCleanup } from "solid-js";
 import { LANGUAGES, type Language } from "../lib/shiki";
 
-const EXTENSION_MAP: Record<Language, string> = {
-  plaintext: "",
+const EXTENSION_MAP: Partial<Record<Language, string>> = {
+  auto: "",
+  plaintext: ".txt",
   typescript: ".tsx, .ts",
   javascript: ".js, .jsx",
   python: ".py",

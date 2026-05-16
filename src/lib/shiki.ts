@@ -35,6 +35,7 @@ export async function highlight(code: string, lang: string): Promise<string> {
 }
 
 export const LANGUAGES = [
+  { value: "auto", label: "Auto Detect" },
   { value: "plaintext", label: "Plain Text" },
   { value: "typescript", label: "TypeScript" },
   { value: "javascript", label: "JavaScript" },
@@ -54,7 +55,24 @@ const SUPPORTED_LANGUAGES = new Set(LANGUAGES.map((l) => l.value));
 export function guessLanguage(code: string): Language {
   const result = flouride(code, { shiki: true, noUnknown: true });
   const lang = result.language as Language;
-  return SUPPORTED_LANGUAGES.has(lang) ? lang : "plaintext";
+  return SUPPORTED_LANGUAGES.has(lang) && lang !== "auto" ? lang : "plaintext";
+}
+
+export const LANGUAGE_EXTENSION: Record<string, string> = {
+  typescript: "tsx",
+  javascript: "jsx",
+  python: "py",
+  rust: "rs",
+  go: "go",
+  html: "html",
+  css: "css",
+  json: "json",
+  markdown: "md",
+  plaintext: "txt",
+};
+
+export function getExtension(language: string): string | null {
+  return LANGUAGE_EXTENSION[language] ?? null;
 }
 
 export function getLanguageFromExtension(ext: string): string {

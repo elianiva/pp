@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import { eq } from "drizzle-orm";
 import { getDb, Paste } from "../../lib/db";
 import { generateId } from "../../lib/nanoid";
 
@@ -7,7 +6,7 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const { content, language } = await request.json();
+    const { content, language } = await request.json<Record<string, string>>();
 
     if (!content || typeof content !== "string") {
       return new Response(JSON.stringify({ error: "Content is required" }), {
@@ -25,6 +24,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    const detectedLanguage = language || "auto";
     const id = generateId();
     const createdAt = Date.now();
 
@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ request }) => {
     await db.insert(Paste).values({
       id,
       content,
-      language: language || "plaintext",
+      language: detectedLanguage,
       createdAt,
     });
 

@@ -1,21 +1,10 @@
-import { createSignal, createEffect } from "solid-js";
+import { createSignal } from "solid-js";
 import LanguageSelector from "./LanguageSelector";
-import { guessLanguage, type Language } from "../lib/shiki";
+import { type Language } from "../lib/shiki";
 
 export default function PasteForm() {
   const [content, setContent] = createSignal("");
-  const [language, setLanguage] = createSignal<Language>("plaintext");
-  const [autoDetected, setAutoDetected] = createSignal(false);
-
-  createEffect(() => {
-    const text = content();
-    if (text.length > 10 && !autoDetected()) {
-      const guessed = guessLanguage(text);
-      if (guessed !== "plaintext") {
-        setLanguage(guessed);
-      }
-    }
-  });
+  const [language, setLanguage] = createSignal<Language>("auto");
   const [isSubmitting, setIsSubmitting] = createSignal(false);
   const [error, setError] = createSignal("");
 
@@ -35,14 +24,15 @@ export default function PasteForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: text, language: language() }),
       });
+      const data = (await response.json()) as { id?: string; error?: string };
 
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.error || "Failed to create paste");
       }
 
-      const { id } = await response.json();
-      window.location.href = `/${id}`;
+      if (data.id) {
+        window.location.href = `/${data.id}`;
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to create paste");
       setIsSubmitting(false);
@@ -61,9 +51,8 @@ export default function PasteForm() {
         <div class="relative bg-mauve-50 px-4 py-2 z-20 border border-mauve-200">
           <LanguageSelector
             value={language()}
-            onChange={(v) => {
-              setLanguage(v);
-              setAutoDetected(true);
+            onChange={(lang) => {
+              setLanguage(lang);
             }}
           />
         </div>

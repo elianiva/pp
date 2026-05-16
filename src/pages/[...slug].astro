@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import CodeViewer from '../components/CodeViewer';
 import { getDb, Paste, eq } from '../lib/db';
-import { highlight, getLanguageFromExtension } from '../lib/shiki';
+import { highlight, getLanguageFromExtension, guessLanguage, getExtension } from '../lib/shiki';
 
 const { slug } = Astro.params;
 
@@ -11,7 +11,7 @@ if (!slug) {
   return Astro.redirect('/');
 }
 
-// Parse slug to extract id and optional extension (e.g., "abc123.ts" -> id="abc123", ext="ts")
+// Parse slug to extract id and optional extension (e.g., "abc123.tsx" -> id="abc123", ext="tsx")
 const [id, ext] = slug.split('.');
 
 const db = getDb();
@@ -22,6 +22,16 @@ if (result.length === 0) {
 }
 
 const paste = result[0];
+
+// If stored language is "auto" and no extension in URL, detect and redirect
+if (paste.language === "auto" && !ext) {
+  const detected = guessLanguage(paste.content);
+  const extension = getExtension(detected);
+  if (extension) {
+    return Astro.redirect(`/${id}.${extension}`);
+  }
+}
+
 const language = ext ? getLanguageFromExtension(ext) : paste.language;
 const highlightedHtml = await highlight(paste.content, language);
 ---
