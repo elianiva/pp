@@ -10,4 +10,12 @@
   "observability": {
     "enabled": true,
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "pp",
+      "database_id": "54f42ea9-6918-43c8-a57a-67ded59cea9e",
+    },
+  ],
 }
+

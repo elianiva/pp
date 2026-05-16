@@ -12,27 +12,27 @@
     "generate-types": "wrangler types"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.1.4",
+    "@astrojs/cloudflare": "^13.5.1",
     "@astrojs/solid-js": "^6.0.1",
     "@elianiva/flouride": "^1.4.0",
     "@fontsource-variable/lilex": "^5.2.1",
     "@fontsource-variable/space-grotesk": "^5.2.10",
-    "@libsql/client": "^0.17.2",
     "@shikijs/core": "^4.0.2",
     "@shikijs/engine-oniguruma": "^4.0.2",
     "@shikijs/langs": "^4.0.2",
     "@shikijs/themes": "^4.0.2",
-    "@tailwindcss/vite": "^4.2.2",
-    "@tursodatabase/serverless": "^1.0.0",
-    "astro": "^6.1.1",
+    "@tailwindcss/vite": "^4.3.0",
+    "astro": "^6.3.3",
     "drizzle-orm": "^0.45.2",
-    "nanoid": "^5.1.7",
+    "nanoid": "^5.1.11",
     "shiki": "^4.0.2",
-    "solid-js": "^1.9.12",
-    "tailwindcss": "^4.2.2",
-    "wrangler": "^4.78.0"
+    "solid-js": "^1.9.13",
+    "tailwindcss": "^4.3.0",
+    "wrangler": "^4.92.0"
   },
   "devDependencies": {
+    "@types/node": "^25.8.0",
+    "drizzle-kit": "^0.31.10",
     "vite-plus": "latest"
   },
   "engines": {

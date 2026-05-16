@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from "astro/config";
+import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import solidJs from "@astrojs/solid-js";
 import cloudflare from "@astrojs/cloudflare";
@@ -20,23 +20,9 @@ export default defineConfig({
       },
     },
     ssr: {
-      noExternal: ["drizzle-orm", "@libsql/client"],
+      noExternal: ["drizzle-orm"],
     },
   },
 
   adapter: cloudflare(),
-  env: {
-    schema: {
-      ASTRO_DB_REMOTE_URL: envField.string({
-        context: "server",
-        access: "secret",
-        optional: false,
-      }),
-      ASTRO_DB_APP_TOKEN: envField.string({
-        context: "server",
-        access: "secret",
-        optional: false,
-      }),
-    },
-  },
 });
