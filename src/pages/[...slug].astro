@@ -33,6 +33,7 @@ if (paste.language === "auto" && !ext) {
 }
 
 const language = ext ? getLanguageFromExtension(ext) : paste.language;
+const isMarkdown = language === "markdown";
 const highlightedHtml = await highlight(paste.content, language);
 ---
 
@@ -54,7 +55,7 @@ const highlightedHtml = await highlight(paste.content, language);
     <Header id={id} />
 
     <div class="relative">
-      <CodeViewer client:load html={highlightedHtml} rawContent={paste.content} />
+      <CodeViewer client:load html={highlightedHtml} rawContent={paste.content} isMarkdown={isMarkdown} />
     </div>
   </main>
 </Layout>
