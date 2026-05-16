@@ -1,6 +1,6 @@
 import { createHighlighterCore } from "@shikijs/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
-import flourite from "flourite";
+import flouride from "@elianiva/flouride";
 import typescript from "@shikijs/langs/typescript";
 import javascript from "@shikijs/langs/javascript";
 import python from "@shikijs/langs/python";
@@ -52,7 +52,7 @@ export type Language = (typeof LANGUAGES)[number]["value"];
 const SUPPORTED_LANGUAGES = new Set(LANGUAGES.map((l) => l.value));
 
 export function guessLanguage(code: string): Language {
-  const result = flourite(code, { shiki: true, noUnknown: true });
+  const result = flouride(code, { shiki: true, noUnknown: true });
   const lang = result.language as Language;
   return SUPPORTED_LANGUAGES.has(lang) ? lang : "plaintext";
 }
