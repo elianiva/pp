@@ -1,10 +1,21 @@
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
 import LanguageSelector from "./LanguageSelector";
-import type { Language } from "../lib/shiki";
+import { guessLanguage, type Language } from "../lib/shiki";
 
 export default function PasteForm() {
   const [content, setContent] = createSignal("");
   const [language, setLanguage] = createSignal<Language>("plaintext");
+  const [autoDetected, setAutoDetected] = createSignal(false);
+
+  createEffect(() => {
+    const text = content();
+    if (text.length > 10 && !autoDetected()) {
+      const guessed = guessLanguage(text);
+      if (guessed !== "plaintext") {
+        setLanguage(guessed);
+      }
+    }
+  });
   const [isSubmitting, setIsSubmitting] = createSignal(false);
   const [error, setError] = createSignal("");
 
@@ -48,7 +59,13 @@ export default function PasteForm() {
         "
       >
         <div class="relative bg-mauve-50 px-4 py-2 z-20 border border-mauve-200">
-          <LanguageSelector value={language()} onChange={setLanguage} />
+          <LanguageSelector
+            value={language()}
+            onChange={(v) => {
+              setLanguage(v);
+              setAutoDetected(true);
+            }}
+          />
         </div>
       </div>
 
