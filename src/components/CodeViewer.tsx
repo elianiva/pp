@@ -2,6 +2,7 @@ import { createMemo, createSignal } from "solid-js";
 
 interface CodeViewerProps {
   html: string;
+  renderedHtml?: string | null;
   rawContent: string;
   isMarkdown?: boolean;
   rendered?: boolean;
@@ -107,9 +108,9 @@ export default function CodeViewer(props: CodeViewerProps) {
       </div>
 
       {props.isMarkdown && showRendered() ? (
-        <div class="border-b border-mauve-200 w-full p-8 bg-white">
+        <div class="border-b border-mauve-200 w-full px-4 py-3 bg-white">
           <div
-            innerHTML={props.html}
+            innerHTML={props.renderedHtml ?? props.html}
             class="markdown-body text-[15px] leading-relaxed text-mauve-800
               [&_h1]:text-2xl [&_h1]:font-sans [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4
               [&_h2]:xl:text-xl [&_h2]:font-sans [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-3
@@ -120,7 +121,7 @@ export default function CodeViewer(props: CodeViewerProps) {
               [&_li]:my-1
               [&_a]:text-mauve-700 [&_a]:underline [&_a]:decoration-mauve-300 [&_a]:underline-offset-2 [&_a]:hover:text-mauve-900
               [&_code]:font-mono [&_code]:text-[13px] [&_code]:bg-mauve-100 [&_code]:px-1.5 [&_code]:py-0.5
-              [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:border [&_pre]:border-mauve-200
+              [&_pre]:my-4 [&_pre]:overflow-x-auto
               [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[13px]
               [&_table]:my-4 [&_table]:w-full [&_table]:text-[14px]
               [&_thead]:border-b [&_thead]:border-mauve-200
