@@ -1,21 +1,20 @@
 import { createMemo, createSignal } from "solid-js";
-import { parse } from "marked";
 
 interface CodeViewerProps {
   html: string;
   rawContent: string;
   isMarkdown?: boolean;
+  rendered?: boolean;
 }
 
 export default function CodeViewer(props: CodeViewerProps) {
   const [showLineNumbers, setShowLineNumbers] = createSignal(true);
   const [wrapLines, setWrapLines] = createSignal(false);
   const [copied, setCopied] = createSignal(false);
-  const [showRendered, setShowRendered] = createSignal(props.isMarkdown ?? false);
-  const renderedHtml = createMemo(() => parse(props.rawContent, { async: false }) as string);
+  const [showRendered, setShowRendered] = createSignal(props.rendered ?? false);
   const contentWithLineNumberDivs = createMemo(() =>
     props.html.replace(
-      /<span class="line">([\s\S]*?)<\/span>/g,
+      /<span class="line">([\s\S]*?)<\/span>(\n|$)/g,
       (_, lineContent: string) =>
         `<div class="code-line"><div class="line-number" aria-hidden="true"></div><div class="line-content">${lineContent}</div></div>`,
     ),
@@ -110,8 +109,26 @@ export default function CodeViewer(props: CodeViewerProps) {
       {props.isMarkdown && showRendered() ? (
         <div class="border-b border-mauve-200 w-full p-8 bg-white">
           <div
-            innerHTML={renderedHtml()}
-            class="prose prose-sm max-w-none prose-headings:font-sans prose-a:text-mauve-700 prose-a:underline prose-code:font-mono prose-code:text-sm prose-pre:bg-mauve-50 prose-pre:border prose-pre:border-mauve-200 prose-img:border prose-img:border-mauve-200 prose-blockquote:border-l-mauve-300 prose-blockquote:text-mauve-600"
+            innerHTML={props.html}
+            class="markdown-body text-[15px] leading-relaxed text-mauve-800
+              [&_h1]:text-2xl [&_h1]:font-sans [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4
+              [&_h2]:xl:text-xl [&_h2]:font-sans [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-3
+              [&_h3]:text-lg [&_h3]:font-sans [&_h3]:font-semibold [&_h3]:mt-5 [&_h3]:mb-2
+              [&_p]:my-3
+              [&_ul]:my-3 [&_ul]:pl-6 [&_ul]:list-disc
+              [&_ol]:my-3 [&_ol]:pl-6 [&_ol]:list-decimal
+              [&_li]:my-1
+              [&_a]:text-mauve-700 [&_a]:underline [&_a]:decoration-mauve-300 [&_a]:underline-offset-2 [&_a]:hover:text-mauve-900
+              [&_code]:font-mono [&_code]:text-[13px] [&_code]:bg-mauve-100 [&_code]:px-1.5 [&_code]:py-0.5
+              [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:border [&_pre]:border-mauve-200
+              [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[13px]
+              [&_table]:my-4 [&_table]:w-full [&_table]:text-[14px]
+              [&_thead]:border-b [&_thead]:border-mauve-200
+              [&_th]:py-2 [&_th]:text-left [&_th]:font-sans [&_th]:font-semibold [&_th]:text-mauve-600
+              [&_td]:py-2 [&_td]:border-b [&_td]:border-mauve-100
+              [&_blockquote]:my-4 [&_blockquote]:border-l-2 [&_blockquote]:border-mauve-300 [&_blockquote]:pl-4 [&_blockquote]:text-mauve-600
+              [&_hr]:my-6 [&_hr]:border-mauve-200
+              [&_img]:my-4 [&_img]:border [&_img]:border-mauve-200"
           />
         </div>
       ) : (

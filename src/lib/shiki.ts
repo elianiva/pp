@@ -11,6 +11,8 @@ import css from "@shikijs/langs/css";
 import json from "@shikijs/langs/json";
 import markdown from "@shikijs/langs/markdown";
 import oneLight from "@shikijs/themes/one-light";
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
 
 let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | null = null;
 
@@ -92,4 +94,18 @@ export function getLanguageFromExtension(ext: string): string {
     txt: "plaintext",
   };
   return map[ext] || "plaintext";
+}
+
+export async function renderMarkdown(content: string): Promise<string> {
+  const hl = await getHighlighter();
+  const marked = new Marked(
+    markedHighlight({
+      langPrefix: "shiki language-",
+      highlight(code, lang) {
+        const language = lang && hl.getLanguage(lang) ? lang : "text";
+        return hl.codeToHtml(code, { lang: language, theme: "one-light" });
+      },
+    }),
+  );
+  return marked.parse(content) as string;
 }

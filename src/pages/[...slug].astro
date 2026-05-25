@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import CodeViewer from '../components/CodeViewer';
 import { getDb, Paste, eq } from '../lib/db';
-import { highlight, getLanguageFromExtension, guessLanguage, getExtension } from '../lib/shiki';
+import { highlight, renderMarkdown, getLanguageFromExtension, guessLanguage, getExtension } from '../lib/shiki';
 
 const { slug } = Astro.params;
 
@@ -34,7 +34,9 @@ if (paste.language === "auto" && !ext) {
 
 const language = ext ? getLanguageFromExtension(ext) : paste.language;
 const isMarkdown = language === "markdown";
-const highlightedHtml = await highlight(paste.content, language);
+const highlightedHtml = isMarkdown
+  ? await renderMarkdown(paste.content)
+  : await highlight(paste.content, language);
 ---
 
 <Layout title={`pp - ${id}`}>
@@ -55,7 +57,7 @@ const highlightedHtml = await highlight(paste.content, language);
     <Header id={id} />
 
     <div class="relative">
-      <CodeViewer client:load html={highlightedHtml} rawContent={paste.content} isMarkdown={isMarkdown} />
+      <CodeViewer client:load html={highlightedHtml} rawContent={paste.content} isMarkdown={isMarkdown} rendered={isMarkdown} />
     </div>
   </main>
 </Layout>
