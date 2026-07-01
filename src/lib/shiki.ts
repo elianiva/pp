@@ -9,6 +9,7 @@ import go from "@shikijs/langs/go";
 import html from "@shikijs/langs/html";
 import css from "@shikijs/langs/css";
 import json from "@shikijs/langs/json";
+import bash from "@shikijs/langs/bash";
 import markdown from "@shikijs/langs/markdown";
 import oneLight from "@shikijs/themes/one-light";
 import { Marked } from "marked";
@@ -21,19 +22,33 @@ export async function getHighlighter() {
 
   highlighter = await createHighlighterCore({
     themes: [oneLight],
-    langs: [typescript, javascript, python, rust, go, html, css, json, markdown],
+    langs: [typescript, javascript, python, rust, go, html, css, json, markdown, bash],
     engine: createJavaScriptRegexEngine(),
   });
 
   return highlighter;
 }
 
+const SHIKI_LANGUAGE_MAP: Record<string, string> = {
+  bash: "bash",
+  sh: "bash",
+  shell: "bash",
+  shellscript: "bash",
+  zsh: "bash",
+  plaintext: "text",
+};
+
+function normaliseLanguage(lang: string): string {
+  return SHIKI_LANGUAGE_MAP[lang] ?? lang;
+}
+
 export async function highlight(code: string, lang: string): Promise<string> {
   const hl = await getHighlighter();
-  return hl.codeToHtml(code, {
-    lang: lang === "plaintext" ? "text" : lang,
-    theme: "one-light",
-  });
+  const normalised = normaliseLanguage(lang);
+  if (hl.getLanguage(normalised)) {
+    return hl.codeToHtml(code, { lang: normalised, theme: "one-light" });
+  }
+  return hl.codeToHtml(code, { lang: "text", theme: "one-light" });
 }
 
 export const LANGUAGES = [
@@ -48,6 +63,7 @@ export const LANGUAGES = [
   { value: "css", label: "CSS" },
   { value: "json", label: "JSON" },
   { value: "markdown", label: "Markdown" },
+  { value: "bash", label: "Bash" },
 ] as const;
 
 export type Language = (typeof LANGUAGES)[number]["value"];
@@ -70,6 +86,7 @@ export const LANGUAGE_EXTENSION: Record<string, string> = {
   css: "css",
   json: "json",
   markdown: "md",
+  bash: "sh",
   plaintext: "txt",
 };
 
@@ -90,6 +107,8 @@ export function getLanguageFromExtension(ext: string): string {
     htm: "html",
     css: "css",
     json: "json",
+    sh: "bash",
+    bash: "bash",
     md: "markdown",
     txt: "plaintext",
   };
@@ -102,7 +121,8 @@ export async function renderMarkdown(content: string): Promise<string> {
     markedHighlight({
       langPrefix: "shiki language-",
       highlight(code, lang) {
-        const language = lang && hl.getLanguage(lang) ? lang : "text";
+        const normalised = normaliseLanguage(lang);
+        const language = lang && hl.getLanguage(normalised) ? normalised : "text";
         return hl.codeToHtml(code, { lang: language, theme: "one-light" });
       },
     }),
