@@ -35,7 +35,7 @@ const SHIKI_LANGUAGE_MAP: Record<string, string> = {
   shell: "bash",
   shellscript: "bash",
   zsh: "bash",
-  plaintext: "text",
+  plaintext: "markdown",
 };
 
 function normaliseLanguage(lang: string): string {
@@ -48,7 +48,7 @@ export async function highlight(code: string, lang: string): Promise<string> {
   if (hl.getLanguage(normalised)) {
     return hl.codeToHtml(code, { lang: normalised, theme: "one-light" });
   }
-  return hl.codeToHtml(code, { lang: "text", theme: "one-light" });
+  return hl.codeToHtml(code, { lang: "markdown", theme: "one-light" });
 }
 
 export const LANGUAGES = [
@@ -122,7 +122,7 @@ export async function renderMarkdown(content: string): Promise<string> {
       langPrefix: "shiki language-",
       highlight(code, lang) {
         const normalised = normaliseLanguage(lang);
-        const language = lang && hl.getLanguage(normalised) ? normalised : "text";
+        const language = lang && hl.getLanguage(normalised) ? normalised : "markdown";
         return hl.codeToHtml(code, { lang: language, theme: "one-light" });
       },
     }),
