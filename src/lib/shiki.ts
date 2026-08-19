@@ -1,4 +1,5 @@
 import { createHighlighterCore } from "@shikijs/core";
+import type { HighlighterCore } from "@shikijs/core";
 import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 import flouride from "@elianiva/flouride";
 import typescript from "@shikijs/langs/typescript";
@@ -15,16 +16,16 @@ import oneLight from "@shikijs/themes/one-light";
 import { Marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 
-let highlighter: Awaited<ReturnType<typeof createHighlighterCore>> | null = null;
+let highlighter: HighlighterCore | null = null;
 
 export async function getHighlighter() {
   if (highlighter) return highlighter;
 
-  highlighter = await createHighlighterCore({
+  highlighter = (await createHighlighterCore({
     themes: [oneLight],
     langs: [typescript, javascript, python, rust, go, html, css, json, markdown, bash],
     engine: createJavaScriptRegexEngine(),
-  });
+  })) as HighlighterCore;
 
   return highlighter;
 }
@@ -82,7 +83,7 @@ export const LANGUAGE_EXTENSION: Record<string, string> = {
   python: "py",
   rust: "rs",
   go: "go",
-  html: "html",
+  html: "htm",
   css: "css",
   json: "json",
   markdown: "md",
