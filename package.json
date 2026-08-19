@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "portless run --name pp astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@types/node": "^25.8.0",
     "drizzle-kit": "^0.31.10",
+    "portless": "^0.15.5",
     "vite-plus": "latest"
   },
   "engines": {
