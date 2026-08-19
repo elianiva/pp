@@ -5,6 +5,7 @@ interface CodeViewerProps {
   renderedHtml?: string | null;
   rawContent: string;
   isMarkdown?: boolean;
+  isHtml?: boolean;
   rendered?: boolean;
 }
 
@@ -13,6 +14,7 @@ export default function CodeViewer(props: CodeViewerProps) {
   const [wrapLines, setWrapLines] = createSignal(false);
   const [copied, setCopied] = createSignal(false);
   const [showRendered, setShowRendered] = createSignal(props.rendered ?? false);
+  const hasRenderTabs = props.isMarkdown || props.isHtml;
   const contentWithLineNumberDivs = createMemo(() =>
     props.html.replace(
       /<span class="line">([\s\S]*?)<\/span>(\n|$)/g,
@@ -21,6 +23,17 @@ export default function CodeViewer(props: CodeViewerProps) {
     ),
   );
   let timer: NodeJS.Timeout | null = null;
+  let iframeRef: HTMLIFrameElement | undefined;
+  const CONTENT_WIDTH = 1920;
+
+  const wrappedSrcdoc = `<html><head><style>html,body{height:100%;margin:0;overflow:hidden;display:flex;justify-content:center;align-items:center;}#scale-root{transform-origin:top center;}</style></head><body><div id="scale-root" style="width:${CONTENT_WIDTH}px;">${props.rawContent}</div><script>window.addEventListener('message',e=>{if(typeof e.data==='number'){document.getElementById('scale-root').style.transform='scale('+e.data+')';document.body.style.width=e.data*${CONTENT_WIDTH}+'px';}})</script></body></html>`;
+
+  const handleIframeLoad = () => {
+    if (!iframeRef) return;
+    const scale = iframeRef.clientWidth / CONTENT_WIDTH;
+    iframeRef.contentWindow?.postMessage(scale, '*');
+  };
+
 
   const handleCopy = async () => {
     if (timer) clearTimeout(timer);
@@ -46,7 +59,7 @@ export default function CodeViewer(props: CodeViewerProps) {
       >
         <div class="relative flex items-center justify-between bg-mauve-50 px-4 py-2 z-20 border border-mauve-200">
           <div class="flex items-center gap-4">
-            {props.isMarkdown && (
+            {hasRenderTabs && (
               <div class="flex items-center gap-1 border-r border-mauve-200 pr-4">
                 <button
                   onClick={() => setShowRendered(true)}
@@ -70,7 +83,7 @@ export default function CodeViewer(props: CodeViewerProps) {
                 </button>
               </div>
             )}
-            {(!props.isMarkdown || !showRendered()) && (
+            {(!hasRenderTabs || !showRendered()) && (
               <>
                 <label class="flex items-center gap-2 text-sm cursor-pointer border-r border-mauve-200 pr-4">
                   <input
@@ -107,31 +120,43 @@ export default function CodeViewer(props: CodeViewerProps) {
         </div>
       </div>
 
-      {props.isMarkdown && showRendered() ? (
-        <div class="border-b border-mauve-200 w-full px-4 py-3 bg-white">
-          <div
-            innerHTML={props.renderedHtml ?? props.html}
-            class="markdown-body text-[15px] leading-relaxed text-mauve-800
-              [&_h1]:text-2xl [&_h1]:font-sans [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4
-              [&_h2]:xl:text-xl [&_h2]:font-sans [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-3
-              [&_h3]:text-lg [&_h3]:font-sans [&_h3]:font-semibold [&_h3]:mt-5 [&_h3]:mb-2
-              [&_p]:my-3
-              [&_ul]:my-3 [&_ul]:pl-6 [&_ul]:list-disc
-              [&_ol]:my-3 [&_ol]:pl-6 [&_ol]:list-decimal
-              [&_li]:my-1
-              [&_a]:text-mauve-700 [&_a]:underline [&_a]:decoration-mauve-300 [&_a]:underline-offset-2 [&_a]:hover:text-mauve-900
-              [&_code]:font-mono [&_code]:text-[13px] [&_code]:bg-mauve-100 [&_code]:px-1.5 [&_code]:py-0.5
-              [&_pre]:my-4 [&_pre]:overflow-x-auto
-              [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[13px]
-              [&_table]:my-4 [&_table]:w-full [&_table]:text-[14px]
-              [&_thead]:border-b [&_thead]:border-mauve-200
-              [&_th]:py-2 [&_th]:text-left [&_th]:font-sans [&_th]:font-semibold [&_th]:text-mauve-600
-              [&_td]:py-2 [&_td]:border-b [&_td]:border-mauve-100
-              [&_blockquote]:my-4 [&_blockquote]:border-l-2 [&_blockquote]:border-mauve-300 [&_blockquote]:pl-4 [&_blockquote]:text-mauve-600
-              [&_hr]:my-6 [&_hr]:border-mauve-200
-              [&_img]:my-4 [&_img]:border [&_img]:border-mauve-200"
-          />
-        </div>
+      {hasRenderTabs && showRendered() ? (
+        props.isHtml ? (
+          <div class="border-b border-mauve-200 w-full bg-white">
+            <iframe
+              ref={(el: HTMLIFrameElement) => (iframeRef = el)}
+              srcdoc={wrappedSrcdoc}
+              sandbox="allow-scripts"
+              class="w-full border-0 aspect-video mx-auto"
+              onLoad={handleIframeLoad}
+            />
+          </div>
+        ) : (
+          <div class="border-b border-mauve-200 w-full px-4 py-3 bg-white">
+            <div
+              innerHTML={props.renderedHtml ?? props.html}
+              class="markdown-body text-[15px] leading-relaxed text-mauve-800
+                [&_h1]:text-2xl [&_h1]:font-sans [&_h1]:font-bold [&_h1]:mt-8 [&_h1]:mb-4
+                [&_h2]:xl:text-xl [&_h2]:font-sans [&_h2]:font-semibold [&_h2]:mt-6 [&_h2]:mb-3
+                [&_h3]:text-lg [&_h3]:font-sans [&_h3]:font-semibold [&_h3]:mt-5 [&_h3]:mb-2
+                [&_p]:my-3
+                [&_ul]:my-3 [&_ul]:pl-6 [&_ul]:list-disc
+                [&_ol]:my-3 [&_ol]:pl-6 [&_ol]:list-decimal
+                [&_li]:my-1
+                [&_a]:text-mauve-700 [&_a]:underline [&_a]:decoration-mauve-300 [&_a]:underline-offset-2 [&_a]:hover:text-mauve-900
+                [&_code]:font-mono [&_code]:text-[13px] [&_code]:bg-mauve-100 [&_code]:px-1.5 [&_code]:py-0.5
+                [&_pre]:my-4 [&_pre]:overflow-x-auto
+                [&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-[13px]
+                [&_table]:my-4 [&_table]:w-full [&_table]:text-[14px]
+                [&_thead]:border-b [&_thead]:border-mauve-200
+                [&_th]:py-2 [&_th]:text-left [&_th]:font-sans [&_th]:font-semibold [&_th]:text-mauve-600
+                [&_td]:py-2 [&_td]:border-b [&_td]:border-mauve-100
+                [&_blockquote]:my-4 [&_blockquote]:border-l-2 [&_blockquote]:border-mauve-300 [&_blockquote]:pl-4 [&_blockquote]:text-mauve-600
+                [&_hr]:my-6 [&_hr]:border-mauve-200
+                [&_img]:my-4 [&_img]:border [&_img]:border-mauve-200"
+            />
+          </div>
+        )
       ) : (
         <div
           onWheel={handleCodeWheel}

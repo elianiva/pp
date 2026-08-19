@@ -34,8 +34,9 @@ if (paste.language === "auto" && !ext) {
 
 const language = ext ? getLanguageFromExtension(ext) : paste.language;
 const isMarkdown = language === "markdown";
+const isHtml = language === "html";
 const codeHtml = await highlight(paste.content, isMarkdown ? "markdown" : language);
-const renderedHtml = isMarkdown ? await renderMarkdown(paste.content) : null;
+const renderedHtml = isMarkdown ? await renderMarkdown(paste.content) : isHtml ? paste.content : null;
 ---
 
 <Layout title={`pp - ${id}`}>
@@ -56,7 +57,7 @@ const renderedHtml = isMarkdown ? await renderMarkdown(paste.content) : null;
     <Header id={id} />
 
     <div class="relative">
-      <CodeViewer client:load html={codeHtml} renderedHtml={renderedHtml} rawContent={paste.content} isMarkdown={isMarkdown} rendered={isMarkdown} />
+      <CodeViewer client:load html={codeHtml} renderedHtml={renderedHtml} rawContent={paste.content} isMarkdown={isMarkdown} isHtml={isHtml} rendered={isMarkdown} />
     </div>
   </main>
 </Layout>
